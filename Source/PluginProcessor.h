@@ -93,9 +93,9 @@ private:
     static void updateCoefficients(Coefficients& old, const Coefficients& replacements);
 
     template<int Index, typename ChainType, typename CoefficientType>
-    void update(ChainType& chain, const CoefficientType& cutCoefficients)
+    void update(ChainType& chain, const CoefficientType& coefficients)
     {
-        updateCoefficients(chain.template get<0>().coefficients, cutCoefficients[Index]);
+        updateCoefficients(chain.template get<0>().coefficients, coefficients[Index]);
             chain.template setBypassed<Index>(false);
     }
 
@@ -103,7 +103,6 @@ private:
 
     void updateCutFilter(ChainType& chain,
                                     const CoefficientType& coefficients,
-                                    //const ChainSettings& chainSettings)
                                     const Slope& slope)
     {
 
@@ -132,6 +131,11 @@ private:
         }
         }
     }
+
+    void updateLowCutFilters(const ChainSettings& chainSettings);
+    void updateHighCutFilters(const ChainSettings& chainSettings);
+
+    void updateFilters();
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JulesEQAudioProcessor)
