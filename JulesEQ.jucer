@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="d1ENk2" name="JulesEQ" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="17"
-              pluginFormats="buildStandalone,buildVST3">
+              pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="RUT8Lw" name="JulesEQ">
     <GROUP id="{8FC8A7B5-4DDB-61BA-FED8-3F4DD3F582D3}" name="Source">
       <FILE id="dr6SWp" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -34,6 +34,7 @@
         <MODULEPATH id="juce_graphics" path="../../repos/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../repos/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../repos/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../repos/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
   </EXPORTFORMATS>
@@ -47,6 +48,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
