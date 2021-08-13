@@ -11,7 +11,16 @@
 
 //==============================================================================
 JulesEQAudioProcessorEditor::JulesEQAudioProcessorEditor (JulesEQAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p),
+
+    peakFreqSliderAttachement(audioProcessor.apvts, "Peak Freq", peakFreqSlider),
+    peakGainSliderAttachement(audioProcessor.apvts, "Peak Gain", peakGainSlider),
+    peakQualitySliderAttachement(audioProcessor.apvts, "Peak Quality", peakQualitySlider),
+    lowCutFreqSliderAttachement(audioProcessor.apvts, "LowCut Freq", lowCutFreqSlider),
+    highCutFreqSliderAttachement(audioProcessor.apvts, "HighCut Freq", highCutFreqSlider),
+    lowCutSlopeSliderAttachement(audioProcessor.apvts, "LowCut Slope", lowCutSlopeSlider),
+    highCutSlopeSliderAttachement(audioProcessor.apvts, "HighCut Slope", highCutSlopeSlider)
+
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
