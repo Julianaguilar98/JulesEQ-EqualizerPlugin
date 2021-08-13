@@ -1,5 +1,4 @@
 # JulesEQ-EqualizerPlugin
-Made in C++ with JUCE Framework.
 
 JulesEQ is a 3 band digital Equalizer with a custom GUI, spectrum analyzer and a response curve.
 
@@ -10,3 +9,5 @@ The shelf bands have an adjustable slope, and the parametric band has adjustable
 Best of all, JulesEQ is available in VST3/AU/AAX Format, so it is compatible with a wide range of Digital Audio Workstations (DAW's).
 
 This includes: Reaper, Cubase, Ableton, Pro Tools, and Logic Pro.
+
+Made in C++ with JUCE Framework.
