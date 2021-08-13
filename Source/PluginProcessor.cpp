@@ -180,7 +180,8 @@ bool JulesEQAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* JulesEQAudioProcessor::createEditor()
 {
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new JulesEQAudioProcessorEditor(*this);
+    //return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
