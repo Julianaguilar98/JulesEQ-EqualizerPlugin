@@ -134,6 +134,19 @@ void JulesEQAudioProcessorEditor::resized()
 
 }
 
+void JulesEQAudioProcessorEditor::parameterValueChanged(int parameterIndex, float newValue)
+{
+    parametersChanged.set(true);
+}
+
+void JulesEQAudioProcessorEditor::timerCallback()
+{
+    if (parametersChanged.compareAndSetBool(false, true))
+    {
+        //update monochain and signal repaint
+    }
+}
+
 std::vector<juce::Component*> JulesEQAudioProcessorEditor::getComps()
 {
     return
