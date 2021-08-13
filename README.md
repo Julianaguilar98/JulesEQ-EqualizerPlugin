@@ -1,4 +1,5 @@
 # JulesEQ-EqualizerPlugin
+Made in C++ with JUCE Framework.
 
 JulesEQ is a 3 band digital Equalizer with a custom GUI, spectrum analyzer and a response curve.
 
