@@ -51,7 +51,6 @@ void update(ChainType& chain, const CoefficientType& coefficients)
 }
 
 template<typename ChainType, typename CoefficientType>
-
 void updateCutFilter(ChainType& chain,
     const CoefficientType& coefficients,
     const Slope& slope)
@@ -92,7 +91,7 @@ inline auto makeLowCutFilter(const ChainSettings& chainSettings, double sampleRa
 
 inline auto makeHighCutFilter(const ChainSettings& chainSettings, double sampleRate)
 {
-    return juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.highCutFreq,
+    return juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(chainSettings.highCutFreq,
                                                                                         sampleRate,
                                                                                         2 * (chainSettings.highCutSlope + 1));
 }

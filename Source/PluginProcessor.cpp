@@ -268,8 +268,9 @@ void JulesEQAudioProcessor::updateHighCutFilters(const ChainSettings& chainSetti
 
     auto& leftHighCut = leftChain.get<ChainPositions::HighCut>();
     auto& rightHighCut = rightChain.get<ChainPositions::HighCut>();
-    updateCutFilter(rightHighCut, cutCoefficients, chainSettings.highCutSlope);
     updateCutFilter(leftHighCut, cutCoefficients, chainSettings.highCutSlope);
+    updateCutFilter(rightHighCut, cutCoefficients, chainSettings.highCutSlope);
+
 
 }
 

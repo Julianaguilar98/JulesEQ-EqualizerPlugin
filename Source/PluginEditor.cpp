@@ -88,13 +88,13 @@ void JulesEQAudioProcessorEditor::paint(juce::Graphics& g)
             mag *= lowcut.get<3>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
 
         if (!highcut.isBypassed<0>())
-            mag *= lowcut.get<0>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
+            mag *= highcut.get<0>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
         if (!highcut.isBypassed<1>())
-            mag *= lowcut.get<1>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
+            mag *= highcut.get<1>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
         if (!highcut.isBypassed<2>())
-            mag *= lowcut.get<2>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
+            mag *= highcut.get<2>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
         if (!highcut.isBypassed<3>())
-            mag *= lowcut.get<3>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
+            mag *= highcut.get<3>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
 
         mags[i] = Decibels::gainToDecibels(mag);
     }
@@ -157,6 +157,12 @@ void JulesEQAudioProcessorEditor::timerCallback()
         auto chainSettings = getChainSettings(audioProcessor.apvts);
         auto peakCoefficients = makePeakFilter(chainSettings, audioProcessor.getSampleRate());
         updateCoefficients(monoChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
+
+        auto lowCutCoefficients = makeLowCutFilter(chainSettings, audioProcessor.getSampleRate());
+        auto highCutCoefficients = makeHighCutFilter(chainSettings, audioProcessor.getSampleRate());
+
+        updateCutFilter(monoChain.get<ChainPositions::LowCut>(), lowCutCoefficients, chainSettings.lowCutSlope);
+        updateCutFilter(monoChain.get<ChainPositions::HighCut>(), highCutCoefficients, chainSettings.highCutSlope);
 
         repaint();
     }
