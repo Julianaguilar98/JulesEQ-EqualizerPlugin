@@ -285,13 +285,18 @@ private:
     using Attachment = APVTS::SliderAttachment;
     
     Attachment peakFreqSliderAttachment,
-                peakGainSliderAttachment,
-                peakQualitySliderAttachment,
-                lowCutFreqSliderAttachment,
-                highCutFreqSliderAttachment,
-                lowCutSlopeSliderAttachment,
-                highCutSlopeSliderAttachment;
+        peakGainSliderAttachment,
+        peakQualitySliderAttachment,
+        lowCutFreqSliderAttachment,
+        highCutFreqSliderAttachment,
+        lowCutSlopeSliderAttachment,
+        highCutSlopeSliderAttachment;
+                
+    juce::ToggleButton lowcutBypassButton, peakBypassButton, highcutBypassButton, analyzerEnabledButton;
     
+    using ButtonAttachment = APVTS::ButtonAttachment;
+    ButtonAttachment lowcutBypassButtonAttachment, peakBypassButtonAttachment, highcutBypassButtonAttachment, analyzerEnabledButtonAttachment;
+
     std::vector<juce::Component*> getComps();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JulesEQAudioProcessorEditor)
