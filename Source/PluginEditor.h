@@ -43,7 +43,17 @@ struct FFTDataGenerator
         //normalize the fft values.
         for( int i = 0; i < numBins; ++i )
         {
-            fftData[i] /= (float) numBins;
+            auto v = fftData[i];
+//            fftData[i] /= (float) numBins;
+            if( !std::isinf(v) && !std::isnan(v) )
+            {
+                v /= float(numBins);
+            }
+            else
+            {
+                v = 0.f;
+            }
+            fftData[i] = v;
         }
         
         //convert them to decibels
@@ -111,13 +121,15 @@ struct AnalyzerPathGenerator
         {
             return juce::jmap(v,
                               negativeInfinity, 0.f,
-                              float(bottom),   top);
+                              float(bottom+10),   top);
         };
 
         auto y = map(renderData[0]);
 
-        jassert( !std::isnan(y) && !std::isinf(y) );
-
+//        jassert( !std::isnan(y) && !std::isinf(y) );
+        if( std::isnan(y) || std::isinf(y) )
+            y = bottom;
+        
         p.startNewSubPath(0, y);
 
         const int pathResolution = 2; //you can draw line-to's every 'pathResolution' pixels.
@@ -126,7 +138,7 @@ struct AnalyzerPathGenerator
         {
             y = map(renderData[binNum]);
 
-            jassert( !std::isnan(y) && !std::isinf(y) );
+//            jassert( !std::isnan(y) && !std::isinf(y) );
 
             if( !std::isnan(y) && !std::isinf(y) )
             {
@@ -161,6 +173,11 @@ struct LookAndFeel : juce::LookAndFeel_V4
                            float rotaryStartAngle,
                            float rotaryEndAngle,
                            juce::Slider&) override;
+    
+    void drawToggleButton (juce::Graphics &g,
+                           juce::ToggleButton & toggleButton,
+                           bool shouldDrawButtonAsHighlighted,
+                           bool shouldDrawButtonAsDown) override;
 };
 
 struct RotarySliderWithLabels : juce::Slider
@@ -203,7 +220,7 @@ struct PathProducer
     PathProducer(SingleChannelSampleFifo<JulesEQAudioProcessor::BlockType>& scsf) :
     leftChannelFifo(&scsf)
     {
-        leftChannelFFTDataGenerator.changeOrder(FFTOrder::order2048);
+        leftChannelFFTDataGenerator.changeOrder(FFTOrder::order4096);
         monoBuffer.setSize(1, leftChannelFFTDataGenerator.getFFTSize());
     }
     void process(juce::Rectangle<float> fftBounds, double sampleRate);
@@ -235,24 +252,65 @@ juce::Timer
     
     void paint(juce::Graphics& g) override;
     void resized() override;
+    
+    void toggleAnalysisEnablement(bool enabled)
+    {
+        shouldShowFFTAnalysis = enabled;
+    }
 private:
     JulesEQAudioProcessor& audioProcessor;
+
+    bool shouldShowFFTAnalysis = true;
+
     juce::Atomic<bool> parametersChanged { false };
     
     MonoChain monoChain;
+
+    void updateResponseCurve();
     
+    juce::Path responseCurve;
+
     void updateChain();
     
-    juce::Image background;
+    void drawBackgroundGrid(juce::Graphics& g);
+    void drawTextLabels(juce::Graphics& g);
     
+    std::vector<float> getFrequencies();
+    std::vector<float> getGains();
+    std::vector<float> getXs(const std::vector<float>& freqs, float left, float width);
+
     juce::Rectangle<int> getRenderArea();
     
     juce::Rectangle<int> getAnalysisArea();
     
     PathProducer leftPathProducer, rightPathProducer;
 };
-
 //==============================================================================
+struct PowerButton : juce::ToggleButton { };
+
+struct AnalyzerButton : juce::ToggleButton
+{
+    void resized() override
+    {
+        auto bounds = getLocalBounds();
+        auto insetRect = bounds.reduced(4);
+        
+        randomPath.clear();
+        
+        juce::Random r;
+        
+        randomPath.startNewSubPath(insetRect.getX(),
+                                   insetRect.getY() + insetRect.getHeight() * r.nextFloat());
+        
+        for( auto x = insetRect.getX() + 1; x < insetRect.getRight(); x += 2 )
+        {
+            randomPath.lineTo(x,
+                              insetRect.getY() + insetRect.getHeight() * r.nextFloat());
+        }
+    }
+    
+    juce::Path randomPath;
+};
 /**
 */
 class JulesEQAudioProcessorEditor  : public juce::AudioProcessorEditor
@@ -285,19 +343,26 @@ private:
     using Attachment = APVTS::SliderAttachment;
     
     Attachment peakFreqSliderAttachment,
-        peakGainSliderAttachment,
-        peakQualitySliderAttachment,
-        lowCutFreqSliderAttachment,
-        highCutFreqSliderAttachment,
-        lowCutSlopeSliderAttachment,
-        highCutSlopeSliderAttachment;
-                
-    juce::ToggleButton lowcutBypassButton, peakBypassButton, highcutBypassButton, analyzerEnabledButton;
-    
-    using ButtonAttachment = APVTS::ButtonAttachment;
-    ButtonAttachment lowcutBypassButtonAttachment, peakBypassButtonAttachment, highcutBypassButtonAttachment, analyzerEnabledButtonAttachment;
+                peakGainSliderAttachment,
+                peakQualitySliderAttachment,
+                lowCutFreqSliderAttachment,
+                highCutFreqSliderAttachment,
+                lowCutSlopeSliderAttachment,
+                highCutSlopeSliderAttachment;
 
     std::vector<juce::Component*> getComps();
+    
+    PowerButton lowcutBypassButton, peakBypassButton, highcutBypassButton;
+    AnalyzerButton analyzerEnabledButton;
+    
+    using ButtonAttachment = APVTS::ButtonAttachment;
+    
+    ButtonAttachment lowcutBypassButtonAttachment,
+                        peakBypassButtonAttachment,
+                        highcutBypassButtonAttachment,
+                        analyzerEnabledButtonAttachment;
+    
+    LookAndFeel lnf;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JulesEQAudioProcessorEditor)
 };
