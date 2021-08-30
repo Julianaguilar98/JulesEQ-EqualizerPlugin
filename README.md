@@ -11,3 +11,5 @@ Best of all, JulesEQ is available in VST3/AU/AAX Format, so it is compatible wit
 This includes: Reaper, Cubase, Ableton, Pro Tools, and Logic Pro.
 
 Made in C++ with the JUCE framework.
+
+Demo Video: https://www.youtube.com/watch?v=FMbDSPVsNbk
