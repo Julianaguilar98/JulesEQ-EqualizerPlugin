@@ -1,4 +1,5 @@
 # JulesEQ-EqualizerPlugin
+![altText](https://hosting.photobucket.com/images/i/Julianaguilar98/JulesEQScreenshot.png?width=1920&height=1080&fit=bounds)
 
 JulesEQ is a 3 band digital Equalizer plugin for DAW's with a rendered GUI, spectrum analyzer and a response curve.
 
